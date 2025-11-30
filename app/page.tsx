@@ -2,61 +2,108 @@
 import Image from "next/image";
 import Filter from "./components/Filter";
 import SearchForm from "./components/SearchForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import RecipeCard from "./components/RecipeCard";
 
 export interface MealSummary {
   idMeal: string;
   strMeal: string;
   strMealThumb: string;
+  strCategory: string;
+  strArea: string;
 }
 
 export default function Home() {
   const [filter, setFilter] = useState(false);
+  const [meals, setMeals] = useState<MealSummary[]>([]);
+  const [search, setSearch] = useState("");
+  const [filterAreas, setFilterAreas] = useState<string[]>([]);
+  const [filterCategories, setFilterCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    axios
+      .get("https://www.themealdb.com/api/json/v1/1/search.php?f=a")
+      .then((res) => setMeals(res.data.meals || []))
+      .catch((err) => console.error(err));
+  }, []);
+
+  const filteredMeals = meals.filter((meal) => {
+    const matchesSearch = meal.strMeal.toLowerCase().includes(search.toLowerCase());
+    const matchesArea = filterAreas.length === 0 || filterAreas.includes(meal.strArea);
+    const matchesCategory = filterCategories.length === 0 || filterCategories.includes(meal.strCategory);
+
+    return matchesSearch && matchesArea && matchesCategory;
+  });
 
   return (
-    <div>
+    <div className="bg-gray-50 min-h-screen pb-20">
       {/* Hero Section */}
-      <div className="relative w-full h-[400px] md:h-[500px] overflow-hidden">
+      <div className="relative w-full h-[400px] md:h-[520px] overflow-hidden shadow-xl">
         <Image
           src="https://img.freepik.com/free-photo/traditional-salad-with-pieces-medium-rare-grilled-ahi-tuna-sesame-with-fresh-vegetable-salad-rice-plate_2829-18465.jpg?semt=ais_hybrid&w=740&q=80"
           alt="heroImage"
           fill
           style={{ objectFit: "cover" }}
           unoptimized
-          className="brightness-75"
+          className="brightness-75 scale-105"
         />
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
-          <h1 className="text-white text-4xl md:text-6xl font-bold drop-shadow-lg">
+          <h1 className="text-white text-4xl md:text-6xl font-extrabold drop-shadow-xl tracking-wide animate-fade-in">
             RECIPES FINDER
           </h1>
-          <p className="text-white text-lg md:text-2xl mt-2 drop-shadow-md">
+          <p className="text-white text-lg md:text-2xl mt-3 drop-shadow-md max-w-xl animate-fade-in">
             You can find your dream food recipe here!
           </p>
         </div>
       </div>
 
-      {/* Search and Filter Grid */}
-      <div className="max-w-6xl mx-auto mt-8 px-4 grid grid-cols-1 md:grid-cols-4 gap-6">
-        
-        {/* Search Section */}
-        <div className="md:col-span-3 bg-white rounded-xl shadow-lg p-6">
-          <SearchForm />
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto mt-10 px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+        {/* Search */}
+        <div className="md:col-span-3 bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+          <SearchForm search={search} setSearch={setSearch} />
         </div>
 
-        {/* Filter Section */}
-        <div 
-          className="md:col-span-1 bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-2xl transition"
-          onClick={() => setFilter(!filter)}
-        >
-          <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
+        {/* Filter toggle */}
+        <div className="md:col-span-1 bg-white rounded-2xl shadow-lg p-6 border border-gray-100 cursor-pointer hover:shadow-2xl transition-all duration-300">
+          <h2 className="text-xl font-semibold mb-4 flex justify-between items-center text-gray-700">
             Filter
-            <span>{filter ? "▲" : "▼"}</span>
+            <span onClick={() => setFilter(!filter)} className="text-gray-500">
+              {filter ? "▲" : "▼"}
+            </span>
           </h2>
-
-          {/* Conditionally show Filter component */}
-          {filter && <Filter />}
         </div>
 
+        {/* Meals + Filter */}
+        <div className="md:col-span-4 flex gap-10 relative">
+          {/* Meals Grid */}
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filteredMeals.length > 0 ? (
+              filteredMeals.map((meal) => (
+                <RecipeCard
+                  key={meal.idMeal}
+                  id={meal.idMeal}
+                  name={meal.strMeal}
+                  categorie={meal.strCategory}
+                  image={meal.strMealThumb}
+                  area={meal.strArea}
+                />
+              ))
+            ) : (
+              <p className="text-gray-500 text-lg col-span-full text-center py-6">No recipes found...</p>
+            )}
+          </div>
+
+          {filter && (
+            <Filter
+              filterAreas={filterAreas}
+              setFilterAreas={setFilterAreas}
+              filterCategories={filterCategories}
+              setFilterCategories={setFilterCategories}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

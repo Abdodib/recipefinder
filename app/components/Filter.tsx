@@ -1,61 +1,69 @@
 "use client";
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
-type Area = {
-  strArea: string;
-}
-type Categorie = {
-  strCategory: string;
-}
+type Area = { strArea: string };
+type Categorie = { strCategory: string };
 
-const Filter = () => {
+// Props typings
+type FilterProps = {
+  filterAreas: string[];
+  setFilterAreas: React.Dispatch<React.SetStateAction<string[]>>;
+  filterCategories: string[];
+  setFilterCategories: React.Dispatch<React.SetStateAction<string[]>>;
+};
+
+const Filter = ({
+  filterAreas,
+  setFilterAreas,
+  filterCategories,
+  setFilterCategories,
+}: FilterProps) => {
   const [areas, setAreas] = useState<Area[]>([]);
   const [categories, setCategories] = useState<Categorie[]>([]);
   const [showArea, setShowArea] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
-  const [filterAreas, setFilterAreas] = useState<string[]>([]);
-  const [filterCategories, setFilterCategories] = useState<string[]>([]);
 
   useEffect(() => {
-    axios.get("https://www.themealdb.com/api/json/v1/1/list.php?a=list")
-      .then(res => setAreas(res.data.meals || []))
-      .catch(err => console.error(err));
+    axios
+      .get("https://www.themealdb.com/api/json/v1/1/list.php?a=list")
+      .then((res) => setAreas(res.data.meals || []));
 
-    axios.get("https://www.themealdb.com/api/json/v1/1/list.php?c=list")
-      .then(res => setCategories(res.data.meals || []))
-      .catch(err => console.error(err));
+    axios
+      .get("https://www.themealdb.com/api/json/v1/1/list.php?c=list")
+      .then((res) => setCategories(res.data.meals || []));
   }, []);
 
-  const handleAreaChange = (area: string, checked: boolean) => {
-    if (checked) setFilterAreas(prev => [...prev, area]);
-    else setFilterAreas(prev => prev.filter(item => item !== area));
-  };
-
-  const handleCategorieChange = (categorie: string, checked: boolean) => {
-    if (checked) setFilterCategories(prev => [...prev, categorie]);
-    else setFilterCategories(prev => prev.filter(item => item !== categorie));
-  };
-
   return (
-    <div className="max-w-4xl mx-auto p-4 bg-white rounded-lg shadow-md flex flex-col gap-4">
-      
+    <div className="w-72 p-5 bg-white rounded-2xl shadow-lg border border-gray-100 flex flex-col gap-6 sticky top-4 h-fit">
+      {/* Areas */}
       <div>
-        <h3 className="flex justify-between items-center cursor-pointer text-lg font-semibold mb-2"
-            onClick={() => setShowArea(!showArea)}>
-          Areas
-          {showArea ? <FaAngleUp /> : <FaAngleDown />}
+        <h3
+          className="flex justify-between items-center cursor-pointer text-lg font-semibold text-gray-700 mb-2"
+          onClick={() => setShowArea(!showArea)}
+        >
+          Areas {showArea ? <FaAngleUp /> : <FaAngleDown />}
         </h3>
+
         {showArea && (
           <div className="flex flex-wrap gap-2">
-            {areas.map(area => (
-              <label key={area.strArea} className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full cursor-pointer hover:bg-gray-200 transition">
+            {areas.map((area) => (
+              <label
+                key={area.strArea}
+                className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full cursor-pointer hover:bg-gray-200 text-gray-700 transition"
+              >
                 <input
                   type="checkbox"
-                  value={area.strArea}
                   checked={filterAreas.includes(area.strArea)}
-                  onChange={e => handleAreaChange(area.strArea, e.target.checked)}
+                  onChange={(e) => {
+                    if (e.target.checked)
+                      setFilterAreas([...filterAreas, area.strArea]);
+                    else
+                      setFilterAreas(
+                        filterAreas.filter((a) => a !== area.strArea)
+                      );
+                  }}
                   className="accent-indigo-500"
                 />
                 {area.strArea}
@@ -65,24 +73,36 @@ const Filter = () => {
         )}
       </div>
 
+      {/* Categories */}
       <div>
-        <h3 className="flex justify-between items-center cursor-pointer text-lg font-semibold mb-2"
-            onClick={() => setShowCategories(!showCategories)}>
-          Categories
-          {showCategories ? <FaAngleUp /> : <FaAngleDown />}
+        <h3
+          className="flex justify-between items-center cursor-pointer text-lg font-semibold text-gray-700 mb-2"
+          onClick={() => setShowCategories(!showCategories)}
+        >
+          Categories {showCategories ? <FaAngleUp /> : <FaAngleDown />}
         </h3>
+
         {showCategories && (
           <div className="flex flex-wrap gap-2">
-            {categories.map(categorie => (
-              <label key={categorie.strCategory} className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full cursor-pointer hover:bg-gray-200 transition">
+            {categories.map((cat) => (
+              <label
+                key={cat.strCategory}
+                className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full cursor-pointer hover:bg-gray-200 text-gray-700 transition"
+              >
                 <input
                   type="checkbox"
-                  value={categorie.strCategory}
-                  checked={filterCategories.includes(categorie.strCategory)}
-                  onChange={e => handleCategorieChange(categorie.strCategory, e.target.checked)}
+                  checked={filterCategories.includes(cat.strCategory)}
+                  onChange={(e) => {
+                    if (e.target.checked)
+                      setFilterCategories([...filterCategories, cat.strCategory]);
+                    else
+                      setFilterCategories(
+                        filterCategories.filter((c) => c !== cat.strCategory)
+                      );
+                  }}
                   className="accent-indigo-500"
                 />
-                {categorie.strCategory}
+                {cat.strCategory}
               </label>
             ))}
           </div>
