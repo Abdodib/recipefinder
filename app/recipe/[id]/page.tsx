@@ -50,16 +50,16 @@ export default function MealDetails() {
     return <div className="text-center text-brand-dark mt-20 text-xl">Meal not found.</div>;
 
   return (
+    <div className=' bg-brand-cream'>
+
     <div className="max-w-5xl mx-auto p-6 bg-brand-cream rounded-2xl shadow-lg mt-10">
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Image */}
         <img
           src={meal.strMealThumb}
           alt={meal.strMeal}
           className="w-full md:w-1/3 rounded-xl shadow-md object-cover"
         />
 
-        {/* Details */}
         <div className="flex-1 flex flex-col gap-4">
           <h1 className="text-3xl md:text-4xl font-bold text-brand-dark">{meal.strMeal}</h1>
           <p className="text-brand-dark/70"><strong>Category:</strong> {meal.strCategory}</p>
@@ -96,6 +96,7 @@ export default function MealDetails() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

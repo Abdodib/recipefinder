@@ -3,10 +3,11 @@ import Link from "next/link";
 import React from "react";
 
 const Header = () => {
-  const Links = [
-    { name: "Explore", link: "/" },
-    { name: "Contact", link: "/contact" },
-  ];
+const Links = [
+  { name: "Explore", link: "/" },
+  { name: "Contact", link: "/contact"}, 
+];
+
 
   return (
     <header className="w-full bg-brand-cream shadow-md py-4 px-6 sticky top-0 z-50 border-b border-brand-orange/40">

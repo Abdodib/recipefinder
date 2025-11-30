@@ -24,8 +24,6 @@ const RecipeCard = ({ id, name, categorie, image, area }: Props) => {
 
       <h3 className="text-xl font-semibold text-brand-dark mt-3">{name}</h3>
       <p className="text-brand-dark/70 text-sm">{categorie} • {area}</p>
-
-      {/* Spacer to push button to bottom */}
       <div className="flex-1"></div>
 
       <Link

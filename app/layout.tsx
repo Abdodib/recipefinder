@@ -17,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body >
-        <Header/>
+        <main className=" bg-brand-cream">
+          <Header/>
         {children}
         <Footer/>
+        </main>
       </body>
     </html>
   );
