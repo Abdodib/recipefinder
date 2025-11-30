@@ -1,41 +1,41 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
-type RecipeCardProps = {
-  id: string,
-  name: string,
-  categorie: string,
-  image: string,
-  area: string
+interface Props {
+  id: string;
+  name: string;
+  categorie: string;
+  image: string;
+  area: string;
 }
 
-const RecipeCard = ({ id, name, categorie, image, area }: RecipeCardProps) => {
+const RecipeCard = ({ id, name, categorie, image, area }: Props) => {
   return (
-    <div className="flex flex-col bg-white shadow-md rounded-2xl p-4 w-full max-w-sm hover:shadow-lg transition-shadow duration-300">
-      <div className="w-full h-40 relative rounded-xl overflow-hidden mb-3">
-        <Image
-          src={image}
-          alt="recipe image"
-          fill
-          className="object-cover"
-        />
-      </div>
+    <div className="bg-white rounded-xl shadow-md border border-brand-orange/30 hover:shadow-xl transition p-3 flex flex-col">
+      
+      <Image
+        src={image}
+        alt={name}
+        width={500}
+        height={300}
+        className="rounded-lg object-cover w-full h-48"
+      />
 
-      <h3 className="text-lg font-semibold text-gray-800 mb-1">{name}</h3>
+      <h3 className="text-xl font-semibold text-brand-dark mt-3">{name}</h3>
+      <p className="text-brand-dark/70 text-sm">{categorie} • {area}</p>
 
-      <div className="flex items-center justify-between text-sm text-gray-600 mb-3">
-        <p>Category: <span className="font-medium">{categorie}</span></p>
-        <p className="font-medium">{area}</p>
-      </div>
+      {/* Spacer to push button to bottom */}
+      <div className="flex-1"></div>
 
-      <Link href={`/${id}/Details`}>
-        <button className="w-full bg-blue-600 text-white py-2 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
-          DETAILS
-        </button>
+      <Link
+        href={`/recipe/${id}`}
+        className="mt-3 px-4 py-2 rounded-lg bg-brand-orange text-white hover:bg-brand-dark transition w-full text-center"
+      >
+        View Recipe
       </Link>
     </div>
-  )
-}
+  );
+};
 
-export default RecipeCard
+export default RecipeCard;

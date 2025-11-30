@@ -6,7 +6,6 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 type Area = { strArea: string };
 type Categorie = { strCategory: string };
 
-// Props typings
 type FilterProps = {
   filterAreas: string[];
   setFilterAreas: React.Dispatch<React.SetStateAction<string[]>>;
@@ -26,21 +25,20 @@ const Filter = ({
   const [showCategories, setShowCategories] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("https://www.themealdb.com/api/json/v1/1/list.php?a=list")
+    axios.get("https://www.themealdb.com/api/json/v1/1/list.php?a=list")
       .then((res) => setAreas(res.data.meals || []));
 
-    axios
-      .get("https://www.themealdb.com/api/json/v1/1/list.php?c=list")
+    axios.get("https://www.themealdb.com/api/json/v1/1/list.php?c=list")
       .then((res) => setCategories(res.data.meals || []));
   }, []);
 
   return (
-    <div className="w-72 p-5 bg-white rounded-2xl shadow-lg border border-gray-100 flex flex-col gap-6 sticky top-4 h-fit">
+    <div className="w-72 p-5 bg-white rounded-2xl shadow-lg border border-brand-orange/30 flex flex-col gap-6 sticky top-4 h-fit">
+
       {/* Areas */}
       <div>
         <h3
-          className="flex justify-between items-center cursor-pointer text-lg font-semibold text-gray-700 mb-2"
+          className="flex justify-between items-center cursor-pointer text-lg font-semibold text-brand-dark mb-2"
           onClick={() => setShowArea(!showArea)}
         >
           Areas {showArea ? <FaAngleUp /> : <FaAngleDown />}
@@ -51,7 +49,7 @@ const Filter = ({
             {areas.map((area) => (
               <label
                 key={area.strArea}
-                className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full cursor-pointer hover:bg-gray-200 text-gray-700 transition"
+                className="flex items-center gap-2 bg-brand-cream px-3 py-1 rounded-full cursor-pointer hover:bg-brand-orange/20 text-brand-dark transition"
               >
                 <input
                   type="checkbox"
@@ -60,11 +58,9 @@ const Filter = ({
                     if (e.target.checked)
                       setFilterAreas([...filterAreas, area.strArea]);
                     else
-                      setFilterAreas(
-                        filterAreas.filter((a) => a !== area.strArea)
-                      );
+                      setFilterAreas(filterAreas.filter((a) => a !== area.strArea));
                   }}
-                  className="accent-indigo-500"
+                  className="accent-brand-orange"
                 />
                 {area.strArea}
               </label>
@@ -76,7 +72,7 @@ const Filter = ({
       {/* Categories */}
       <div>
         <h3
-          className="flex justify-between items-center cursor-pointer text-lg font-semibold text-gray-700 mb-2"
+          className="flex justify-between items-center cursor-pointer text-lg font-semibold text-brand-dark mb-2"
           onClick={() => setShowCategories(!showCategories)}
         >
           Categories {showCategories ? <FaAngleUp /> : <FaAngleDown />}
@@ -87,7 +83,7 @@ const Filter = ({
             {categories.map((cat) => (
               <label
                 key={cat.strCategory}
-                className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full cursor-pointer hover:bg-gray-200 text-gray-700 transition"
+                className="flex items-center gap-2 bg-brand-cream px-3 py-1 rounded-full cursor-pointer hover:bg-brand-orange/20 text-brand-dark transition"
               >
                 <input
                   type="checkbox"
@@ -100,7 +96,7 @@ const Filter = ({
                         filterCategories.filter((c) => c !== cat.strCategory)
                       );
                   }}
-                  className="accent-indigo-500"
+                  className="accent-brand-orange"
                 />
                 {cat.strCategory}
               </label>

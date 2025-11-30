@@ -25,34 +25,36 @@ export default function Home() {
     axios
       .get("https://www.themealdb.com/api/json/v1/1/search.php?f=a")
       .then((res) => setMeals(res.data.meals || []))
-      .catch((err) => console.error(err));
+      .catch(console.error);
   }, []);
 
   const filteredMeals = meals.filter((meal) => {
     const matchesSearch = meal.strMeal.toLowerCase().includes(search.toLowerCase());
     const matchesArea = filterAreas.length === 0 || filterAreas.includes(meal.strArea);
-    const matchesCategory = filterCategories.length === 0 || filterCategories.includes(meal.strCategory);
+    const matchesCategory =
+      filterCategories.length === 0 || filterCategories.includes(meal.strCategory);
 
     return matchesSearch && matchesArea && matchesCategory;
   });
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-20">
+    <div className="bg-brand-cream min-h-screen pb-20">
+
       {/* Hero Section */}
       <div className="relative w-full h-[400px] md:h-[520px] overflow-hidden shadow-xl">
         <Image
-          src="https://img.freepik.com/free-photo/traditional-salad-with-pieces-medium-rare-grilled-ahi-tuna-sesame-with-fresh-vegetable-salad-rice-plate_2829-18465.jpg?semt=ais_hybrid&w=740&q=80"
+          src="https://img.freepik.com/free-photo/traditional-salad-with-pieces-medium-rare-grilled-ahi-tuna-sesame-with-fresh-vegetable-salad-rice-plate_2829-18465.jpg"
           alt="heroImage"
           fill
           style={{ objectFit: "cover" }}
-          unoptimized
           className="brightness-75 scale-105"
+          unoptimized
         />
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
-          <h1 className="text-white text-4xl md:text-6xl font-extrabold drop-shadow-xl tracking-wide animate-fade-in">
+          <h1 className="text-white text-4xl md:text-6xl font-extrabold tracking-wide drop-shadow-xl">
             RECIPES FINDER
           </h1>
-          <p className="text-white text-lg md:text-2xl mt-3 drop-shadow-md max-w-xl animate-fade-in">
+          <p className="text-white text-lg md:text-2xl mt-3 drop-shadow-md max-w-xl">
             You can find your dream food recipe here!
           </p>
         </div>
@@ -60,25 +62,31 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto mt-10 px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+
         {/* Search */}
-        <div className="md:col-span-3 bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+        <div className="md:col-span-3 bg-white rounded-2xl shadow-lg p-6 border border-brand-orange/30">
           <SearchForm search={search} setSearch={setSearch} />
         </div>
 
         {/* Filter toggle */}
-        <div className="md:col-span-1 bg-white rounded-2xl shadow-lg p-6 border border-gray-100 cursor-pointer hover:shadow-2xl transition-all duration-300">
-          <h2 className="text-xl font-semibold mb-4 flex justify-between items-center text-gray-700">
+        <div
+          onClick={() => setFilter(!filter)}
+          className="md:col-span-1 bg-white rounded-2xl shadow-lg p-6 border border-brand-orange/30 cursor-pointer hover:shadow-2xl transition-all"
+        >
+          <h2 className="text-xl font-semibold mb-4 flex justify-between items-center text-brand-dark">
             Filter
-            <span onClick={() => setFilter(!filter)} className="text-gray-500">
-              {filter ? "▲" : "▼"}
-            </span>
+            <span className="text-brand-orange">{filter ? "▲" : "▼"}</span>
           </h2>
         </div>
 
         {/* Meals + Filter */}
         <div className="md:col-span-4 flex gap-10 relative">
+
           {/* Meals Grid */}
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div
+            className={`w-full grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 
+              ${filter ? "lg:grid-cols-3" : "lg:grid-cols-4"}`}
+          >
             {filteredMeals.length > 0 ? (
               filteredMeals.map((meal) => (
                 <RecipeCard
@@ -91,7 +99,9 @@ export default function Home() {
                 />
               ))
             ) : (
-              <p className="text-gray-500 text-lg col-span-full text-center py-6">No recipes found...</p>
+              <p className="text-brand-dark/70 text-lg col-span-full text-center py-6">
+                No recipes found...
+              </p>
             )}
           </div>
 

@@ -10,19 +10,20 @@ const SearchForm = ({ search, setSearch }: SearchFormProps) => {
   const handleReset = () => setSearch("");
 
   return (
-    <form className="flex items-center w-full bg-gray-100 rounded-full shadow-inner px-3 py-2">
+    <form className="flex items-center w-full bg-brand-cream rounded-full shadow-inner px-3 py-2 border border-brand-orange/30">
       <input
         type="search"
         placeholder="Search for recipes..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="grow px-4 py-2 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+        className="grow px-4 py-2 bg-transparent outline-none text-brand-dark placeholder:text-brand-dark/50"
       />
+
       {search && (
         <button
           type="button"
           onClick={handleReset}
-          className="px-3 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-full transition"
+          className="px-3 py-2 bg-brand-orange text-white hover:bg-brand-dark rounded-full transition"
         >
           ✕
         </button>
