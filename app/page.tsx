@@ -29,7 +29,13 @@ export default function Home() {
   }, []);
 
   const filteredMeals = meals.filter((meal) => {
-    const matchesSearch = meal.strMeal.toLowerCase().includes(search.toLowerCase());
+    const searchLower = search.toLowerCase();
+
+    const matchesSearch =
+      meal.strMeal.toLowerCase().includes(searchLower) ||
+      meal.strCategory.toLowerCase().includes(searchLower) ||
+      meal.strArea.toLowerCase().includes(searchLower);
+
     const matchesArea = filterAreas.length === 0 || filterAreas.includes(meal.strArea);
     const matchesCategory =
       filterCategories.length === 0 || filterCategories.includes(meal.strCategory);
